@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelpPio3D</title>
+<meta name="description" content="Impressão 3D e papelaria personalizada sob encomenda em São Paulo. Você imagina e nós transformamos em realidade.">
+<link rel="icon" type="image/png" href="marca/favicon.png">
+<link rel="apple-touch-icon" href="marca/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HelpPio3D">
+<meta property="og:description" content="Peças 3D personalizadas e suporte e consultoria em TI. Você imagina e nós transformamos em realidade.">
+<meta property="og:url" content="https://helppio.com.br/">
+<meta property="og:image" content="https://helppio.com.br/marca/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07213c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800;900&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: navy brand band on top, then light sections; layer-line texture borrowed from FDM prints */
+:root{
+  --navy:#0c2b4f;
+  --navy-deep:#07213c;
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --fg:#1a2233;
+  --muted:#56627a;
+  --line:#dde3ee;
+  --filament:#f0a23a;
+  --on-navy:#ffffff;
+  --on-navy-muted:#b9c4dc;
+  --display:"Montserrat", "Arial Black", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#0c2b4f; --navy-deep:#07213c;
+    --bg:#0e1424; --surface:#151d31; --fg:#e8ecf5; --muted:#9aa6c0; --line:#26304a;
+    --filament:#f4b04f; --on-navy:#ffffff; --on-navy-muted:#b9c4dc;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#0c2b4f; --navy-deep:#07213c;
+  --bg:#0e1424; --surface:#151d31; --fg:#e8ecf5; --muted:#9aa6c0; --line:#26304a;
+  --filament:#f4b04f; --on-navy:#ffffff; --on-navy-muted:#b9c4dc;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:1.0625rem;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy-deep)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--filament)}
+:focus-visible{outline:3px solid var(--filament);outline-offset:3px;border-radius:6px}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy-deep);color:var(--on-navy)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:900;letter-spacing:.02em;font-size:1.15rem}
+.brand img{flex:none;width:36px;height:auto}
+.nav{display:flex;gap:20px;font-weight:600;font-size:.95rem}
+.nav a{text-decoration:none;color:var(--on-navy-muted)}
+.nav a:hover{color:var(--on-navy)}
+@media (max-width:720px){.nav{display:none}}
+
+/* Hero */
+.hero{background:var(--navy);color:var(--on-navy);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 6px)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;padding-block:64px 72px;position:relative;z-index:1}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero h1{font-weight:900;font-size:clamp(2.2rem,5.4vw,3.9rem);letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--filament)}
+.hero .lead{color:var(--on-navy-muted);font-size:1.15rem;max-width:34em}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-family:var(--display);font-weight:800;font-size:.98rem;text-decoration:none;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-wa{background:var(--filament);color:var(--navy-deep)}
+.btn-ghost{border:2px solid rgba(255,255,255,.35);color:var(--on-navy)}
+.btn-ghost:hover{background:rgba(255,255,255,.08)}
+.printbed{position:relative;aspect-ratio:1/1;max-width:100%;width:100%;max-width:380px;justify-self:center}
+.printbed canvas{width:100%;height:100%;display:block}
+.printbed .tag{position:absolute;left:0;bottom:0;font-family:var(--mono);font-size:.75rem;color:var(--on-navy-muted)}
+@media (max-width:820px){.hero .wrap{grid-template-columns:1fr;padding-block:44px 52px}.printbed{max-width:260px}}
+
+/* Sections */
+section.block .wrap{padding-block:72px;display:flex;flex-direction:column;gap:36px}
+.head{display:flex;flex-direction:column;gap:10px;max-width:40em}
+.head h2{font-weight:800;font-size:clamp(1.7rem,3.4vw,2.4rem)}
+.head p{color:var(--muted)}
+
+.services{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.service{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.service h3{font-size:1.15rem;font-weight:800}
+.service p{color:var(--muted)}
+.service .more{font-weight:700;color:var(--fg);text-underline-offset:3px}
+.service .ex{font-family:var(--mono);font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto}
+@media (max-width:860px){.services{grid-template-columns:1fr}}
+
+.gallery{columns:3;column-gap:20px}
+.shot{margin:0 0 20px;display:flex;flex-direction:column;gap:8px;min-width:0;break-inside:avoid}
+.ph{aspect-ratio:1/1;max-width:100%;border-radius:12px;border:1px dashed var(--line);display:grid;place-items:center;
+  background:repeating-linear-gradient(0deg,var(--surface) 0 3px,var(--bg) 3px 6px);color:var(--muted);font-family:var(--mono);font-size:.72rem;text-align:center;padding:12px}
+.shot img{width:100%;max-width:100%;height:auto;border-radius:12px;display:block;background:var(--line)}
+.shot figcaption{font-weight:600;font-size:.95rem}
+@media (max-width:860px){.gallery{columns:2}}
+@media (max-width:480px){.gallery{columns:1}}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.steps li{display:flex;flex-direction:column;gap:8px;min-width:0;padding-top:16px;border-top:3px solid var(--navy)}
+:root[data-theme="dark"] .steps li{border-top-color:var(--filament)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .steps li{border-top-color:var(--filament)}}
+.steps li::before{counter-increment:s;content:"0" counter(s);font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.steps h3{font-size:1.05rem;font-weight:800}
+.steps p{color:var(--muted);font-size:.98rem}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+.diffs{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 32px}
+.diff{display:flex;flex-direction:column;gap:6px;min-width:0}
+.diff h3{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.diff h3::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--filament);flex:none}
+.diff p{color:var(--muted)}
+@media (max-width:860px){.diffs{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.diffs{grid-template-columns:1fr}}
+
+.about{background:var(--surface);border-block:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px}
+.about-text{display:flex;flex-direction:column;gap:16px;max-width:36em;min-width:0}
+.mv{display:flex;flex-direction:column;gap:20px;min-width:0}
+.mv div{display:flex;flex-direction:column;gap:6px}
+.mv h3{font-size:1rem;font-weight:800}
+.mv p{color:var(--muted)}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr}}
+
+.cta-band{background:var(--navy);color:var(--on-navy)}
+.cta-band .wrap{padding-block:56px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+.cta-band h2{font-weight:900;font-size:clamp(1.5rem,3vw,2.1rem)}
+.cta-band p{color:var(--on-navy-muted);margin-top:8px}
+.phone{font-family:var(--mono);user-select:all}
+
+footer{background:var(--navy-deep);color:var(--on-navy-muted);font-size:.92rem}
+footer .wrap{padding-block:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+footer h3{font-size:.85rem;color:var(--on-navy);font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+footer a{color:var(--on-navy);text-decoration-color:rgba(255,255,255,.3)}
+footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;font-size:.82rem}
+@media (max-width:720px){footer .wrap{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="HelpPio3D, início">
+      <img src="marca/logo-marca.png" alt="" width="36" height="36">
+      HelpPio3D
+    </a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#servicos">O que fazemos</a>
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#sobre">Sobre nós</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">Peças 3D personalizadas · Suporte e consultoria em TI · São Paulo</span>
+        <h1>Você imagina e nós transformamos em <em>realidade</em>.</h1>
+        <p class="lead">Somos uma empresa familiar que investiga a fundo o que você precisa e encontra a solução certa, seja uma peça 3D feita sob medida ou um suporte de TI que resolve de verdade.</p>
+        <div class="ctas">
+          <a class="btn btn-wa" href="https://wa.me/5511989962399?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
+            Peça um orçamento
+          </a>
+          <a class="btn btn-ghost" href="https://shopee.com.br/shop/1551742347" target="_blank" rel="noopener">Veja nossa loja na Shopee</a>
+        </div>
+      </div>
+      <div class="printbed">
+        <canvas id="bed" width="760" height="760" aria-label="Ilustração de um vaso espiral sendo impresso camada por camada" role="img"></canvas>
+        <span class="tag" id="layer">camada 0,2 mm</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="servicos">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">O que fazemos</span>
+        <h2>Duas frentes, o mesmo cuidado</h2>
+        <p>Começamos entendendo o seu problema. Depois escolhemos o caminho: uma peça criada para você ou uma solução de tecnologia para a sua casa ou empresa.</p>
+      </div>
+      <div class="services">
+        <article class="service">
+          <h3>Peças 3D personalizadas</h3>
+          <p>Decoração, presentes, utilidades e peças sob medida para pessoas e empresas, com a cor, o tamanho e o acabamento que o projeto pede. Para empresas, fazemos brindes com a sua marca, sinalização e soluções para o dia a dia do escritório.</p>
+          <p>Quando o pedido pede um complemento impresso, como cartão, etiqueta ou foto, a gente cuida disso junto.</p>
+          <span class="ex">esculturas · porta-trecos · brindes com logo · placas · topos de bolo</span>
+        </article>
+        <article class="service">
+          <h3>Suporte e consultoria em TI</h3>
+          <p>Upgrade e formatação de computadores, troca de sistema operacional, instalação de programas e consultoria em tecnologia para quem quer resolver o problema de vez, não só apagar o incêndio.</p>
+          <p>Atendimento pela HelpPio Technology Solutions, WhatsApp <span class="phone">(11) 98677-0571</span>. <a class="more" href="https://wa.me/5511986770571?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20preciso%20de%20ajuda%20com%20TI." target="_blank" rel="noopener">Falar sobre TI</a></p>
+          <span class="ex">upgrade · formatação · sistemas · Office · consultoria</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="trabalhos">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Trabalhos</span>
+        <h2>Algumas peças que já saíram da nossa impressora</h2>
+      </div>
+      <div class="gallery">
+        <figure class="shot"><img src="fotos/escultura-abraco.jpg" alt="Escultura branca de mãe abraçando o filho, sobre base redonda, em um nicho iluminado" width="750" height="1000" loading="lazy"><figcaption>Escultura mãe e filho(a)</figcaption></figure>
+        <figure class="shot"><img src="fotos/escultura-infinito.jpg" alt="Escultura preta do símbolo do infinito em ilusão de óptica sobre uma mesa de madeira" width="800" height="800" loading="lazy"><figcaption>Infinito em ilusão de óptica</figcaption></figure>
+        <figure class="shot"><img src="fotos/gato-olhos-grandes.jpg" alt="Ohana, gatinho preto de olhos amarelos e mascote da HelpPio3D, ao lado de uma luminária de acrílico escrita Help Pio 3D" width="750" height="1000" loading="lazy"><figcaption>Ohana, nosso mascote</figcaption></figure>
+        <figure class="shot"><img src="fotos/bandeja-vazada.jpg" alt="Porta-treco redondo preto com laterais vazadas e fundo aveludado, segurado na mão" width="750" height="1000" loading="lazy"><figcaption>Porta-treco com fundo aveludado, para chaves, carteira e afins</figcaption></figure>
+        <figure class="shot"><img src="fotos/bandejas-arvore.jpg" alt="Três petisqueiras em formato de árvore de Natal, rosa, verde e amarela, com petiscos, numa mesa de ceia" width="750" height="1000" loading="lazy"><figcaption>Petisqueiras de Natal</figcaption></figure>
+        <figure class="shot"><img src="fotos/kit-natal.jpg" alt="Papai Noel, árvore, pinguim, urso polar e boneco de neve impressos em 3D com textura de tricô" width="750" height="1000" loading="lazy"><figcaption>Kit de Natal estilo tricô</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="como-funciona">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Da ideia à peça pronta</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Conte sua ideia</h3><p>Mande uma mensagem no WhatsApp com fotos, medidas ou uma referência do que imaginou.</p></li>
+        <li><h3>Orçamento e modelo</h3><p>Enviamos o valor e o prazo. Para peças exclusivas, você aprova o modelo antes da impressão.</p></li>
+        <li><h3>Impressão e acabamento</h3><p>Imprimimos camada por camada e cuidamos de cada detalhe do acabamento.</p></li>
+        <li><h3>Entrega</h3><p>Entregamos em mãos na nossa região ou enviamos para todo o Brasil.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Nosso diferencial</span>
+        <h2>Uma empresa familiar que vai a fundo no seu problema</h2>
+        <p>Somos uma empresa familiar e adaptativa. Investigamos a necessidade de cada cliente e vamos a fundo até encontrar a solução, tecnológica e personalizada. É por isso que trabalhamos com peças 3D sob medida e com suporte e consultoria em TI avançada.</p>
+      </div>
+      <div class="diffs">
+        <div class="diff"><h3>Empresa familiar</h3><p>Você fala direto com quem projeta, produz e atende, sem intermediários.</p></div>
+        <div class="diff"><h3>Adaptativa</h3><p>Ajustamos o projeto, o material e o prazo à sua realidade, não o contrário.</p></div>
+        <div class="diff"><h3>Investigação da necessidade</h3><p>Antes de propor, perguntamos para que serve, onde vai ficar e o que precisa resolver.</p></div>
+        <div class="diff"><h3>Soluções personalizadas</h3><p>Cor, tamanho, nome, logo ou um modelo criado do zero para você.</p></div>
+        <div class="diff"><h3>Preço justo</h3><p>Orçamento claro antes de começar, com valores acessíveis.</p></div>
+        <div class="diff"><h3>Acabamento caprichado</h3><p>Cada peça é revisada e finalizada à mão antes de sair daqui.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block about" id="sobre">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="eyebrow">Sobre nós</span>
+          <h2>Uma empresa de família, feita de tecnologia e cuidado</h2>
+          <p>A HelpPio nasceu como suporte técnico em informática e, em 2025, ganhou a impressão 3D. Hoje unimos as duas coisas que mais gostamos de fazer: resolver problemas com tecnologia e criar objetos que fazem sentido para quem recebe.</p>
+          <p>Produzimos tudo em São Paulo, sob encomenda, sem estoque parado. Cada pedido é tratado como único, e quem acompanha tudo de perto é Ohana, nosso mascote, que você vê na galeria.</p>
+        </div>
+        <div class="mv">
+          <div><h3>Missão</h3><p>Entender a fundo a necessidade de cada cliente e entregar soluções personalizadas, seja em peças 3D ou em tecnologia.</p></div>
+          <div><h3>Visão</h3><p>Ser a referência da nossa região em peças 3D personalizadas e em suporte e consultoria de TI.</p></div>
+          <div><h3>Valores</h3><p>Atendimento próximo, honestidade no orçamento e capricho em cada entrega.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <div>
+        <h2>Tem uma ideia? Vamos tirar do papel.</h2>
+        <p>WhatsApp <span class="phone">(11) 98996-2399</span></p>
+      </div>
+      <a class="btn btn-wa" href="https://wa.me/5511989962399?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener">Pedir orçamento</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>HelpPio3D</h3>
+      <p>Você imagina e nós transformamos em realidade.</p>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <ul>
+        <li>WhatsApp <span class="phone">(11) 98996-2399</span></li>
+        <li><a href="https://shopee.com.br/shop/1551742347" target="_blank" rel="noopener">Loja na Shopee</a></li>
+        <li><a href="https://www.instagram.com/helppio3d" target="_blank" rel="noopener">Instagram @HelpPio3d</a></li>
+        <li><a href="https://www.tiktok.com/@helppio3d" target="_blank" rel="noopener">TikTok @HelpPio3d</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Suporte e consultoria em TI</h3>
+      <p>Precisa de upgrade, formatação ou suporte para o seu computador? Conheça a HelpPio Technology Solutions.</p>
+      <p style="margin-top:6px">WhatsApp <span class="phone">(11) 98677-0571</span></p>
+    </div>
+    <p class="legal">HELP PIO TECHNOLOGY SOLUTIONS LTDA · CNPJ 62.593.956/0001-00 · São Paulo, SP</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var c=document.getElementById('bed'); if(!c) return;
+  var ctx=c.getContext('2d'), W=c.width, H=c.height;
+  var tag=document.getElementById('layer');
+  var layers=70, layerH=6, baseY=H-110;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function radius(i){var t=i/layers;return 120+70*Math.sin(t*Math.PI*0.95)-30*t;}
+  function draw(n){
+    ctx.clearRect(0,0,W,H);
+    // print bed
+    ctx.fillStyle='rgba(255,255,255,0.08)';
+    ctx.beginPath();ctx.ellipse(W/2,baseY+18,300,46,0,0,Math.PI*2);ctx.fill();
+    for(var i=0;i<n;i++){
+      var r=radius(i), y=baseY-i*layerH, tw=Math.sin(i*0.35)*r*0.06;
+      var shade=i===n-1?'#f0a23a':(i%2?'#e9edf6':'#ffffff');
+      ctx.fillStyle=shade;
+      ctx.beginPath();
+      ctx.ellipse(W/2+tw,y,r,r*0.16,0,0,Math.PI*2);
+      ctx.fill();
+      ctx.strokeStyle='rgba(20,37,74,0.18)';ctx.lineWidth=1.2;ctx.stroke();
+    }
+    // nozzle
+    var top=baseY-(n-1)*layerH;
+    ctx.fillStyle='#f0a23a';
+    ctx.beginPath();ctx.moveTo(W/2-14,top-46);ctx.lineTo(W/2+14,top-46);ctx.lineTo(W/2,top-12);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.85)';ctx.fillRect(W/2-34,top-80,68,34);
+    if(tag) tag.textContent='camada '+n+' de '+layers+' · 0,2 mm';
+  }
+  if(reduce){draw(layers);return;}
+  var n=layers; draw(n);
+  var k=1;
+  setTimeout(function step(){
+    draw(k); k++;
+    if(k<=layers) setTimeout(step,55); else setTimeout(function(){k=1;step();},2600);
+  },1600);
+})();
+</script>
+
+</body>
+</html>
